@@ -1,0 +1,19 @@
+<ion-view title="Competition" ng-controller="HomeCtrl">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content class="has-header">
+        <button class="button button-block button-positive" ng-click="new=!new">New competition</button>
+        <div class="list" ng-show="new">
+            <label class="item item-input">
+              <input type="text" ng-model="name" placeholder="New competition"/>
+            </label>
+            <button class="button button-block button-positive" ng-click="encode(name)">Created</button>
+        </div>
+        <ion-list>
+            <ion-item ng-repeat="item in list" href="#/app/competition/{{item.id}}">
+              {{item.name}} / {{item.created}}
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>
