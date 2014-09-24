@@ -1,0 +1,22 @@
+<ion-view title="Categories" ng-controller="CompetitionCtrl">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content class="has-header">
+        <button class="button button-block button-positive" ng-click="new=!new">New category</button>
+        <div class="list" ng-show="new">
+            <label class="item item-input">
+                <input type="text" placeholder="Add category" list="category" ng-model="category" />
+                <datalist id="category">
+                    <option data-ng-repeat="item in categoriesList" value="{{item.name}}" />
+                </datalist>
+            </label>
+            <button class="button button-block button-positive" ng-click="encodeCategory(category)">Add</button>
+        </div>
+        <ion-list>
+            <ion-item ng-repeat="cat in categoriesPresent" class="item" href="#/app/category/{{cat.id}}">
+              {{cat.category.name}}
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

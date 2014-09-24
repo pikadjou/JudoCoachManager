@@ -1,0 +1,55 @@
+<ion-view title="Fight" ng-controller="FightCtrl">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button menu-toggle="right" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content class="has-header">
+        <div class="row">
+            <div class="col">
+                {{fight.white.name}} <div ng-show="win == 1">WINNER</div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col" ng-repeat="m in mark">
+                        <div class="row" ng-click="point('+', m.key, 'scoreWhite')">+</div>
+                        <div class="row">{{m.value}}</div>
+                        <div class="row" ng-click="point('-', m.key, 'scoreWhite')">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col" ng-repeat="m in mark">
+                <div class="row">{{tabPoint["scoreWhite"][m.key]}}</div>
+                <div class="row">{{m.value}}</div>
+                <div class="row">{{tabPoint["scoreBlue"][m.key]}}</div>
+            </div>
+            <div class="col col-center">
+                Winner is
+                <label class="toggle toggle-positive" >
+                    <input type="checkbox" ng-model="win" ng-true-value="2" ng-false-value="1">
+                    <div class="track">
+                      <div class="handle"></div>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {{fight.blue.name}} <div ng-show="win == 2">WINNER</div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col" ng-repeat="m in mark">
+                        <div class="row" ng-click="point('+', m.key, 'scoreBlue')">+</div>
+                        <div class="row">{{m.value}}</div>
+                        <div class="row" ng-click="point('-', m.key, 'scoreBlue')">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="button button-block button-positive" ng-click="save()">Finish!</button>
+    </ion-content>
+</ion-view>

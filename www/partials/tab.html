@@ -1,0 +1,22 @@
+<section ng-controller="TabCtrl">
+  <ion-scroll zooming="true" direction="xy" style="width: 100%;">
+    <div class="row">
+        <div class="col" ng-repeat="type in tab" style="width: 500px;">
+            <div class="row" ng-repeat="number in type" style="width: 500px;">
+                <div class="col">
+                    <div class="row">
+                        <div class="col" style="min-width: 100px;">{{number[1].name}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col" style="min-width: 100px;">{{number[2].name}}</div>
+                    </div>
+                </div>
+                <div class="col col-center">
+                    <a href="#/app/fight/{{number['fight'].id}}" >resultat</a>
+                </div>
+                <div style="min-height: 50px;"></div>
+            </div>
+        </div>
+    </div>
+ </ion-scroll>
+</section>
