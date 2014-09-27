@@ -15,7 +15,7 @@ function populateDB(tx) {
 //    
 //    tx.executeSql('DROP TABLE IF EXISTS CATEGORIES_COMPETITIONS');
 //    tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIES_COMPETITIONS (id INTEGER PRIMARY KEY AUTOINCREMENT, competition_id INTEGER, category_id INTEGER, number INTEGER);');
-       
+//     
 //    tx.executeSql('DROP TABLE IF EXISTS JUDOKAS_COMPETITIONS');
 //    tx.executeSql('CREATE TABLE IF NOT EXISTS JUDOKAS_COMPETITIONS (id INTEGER PRIMARY KEY AUTOINCREMENT, category_competition_id INTEGER, judoka_id INTEGER, place INTEGER, number INTEGER, fights INTEGER, mine INTEGER, weigh TEXT);');
 // 
@@ -53,7 +53,7 @@ function successCB() {
 //    });
 }
 onDeviceReady();
-var app = angular.module('judoapp', ['ngRoute', 'ionic']);
+var app = angular.module('judoapp', ['ngRoute', 'ionic', 'elif']);
 
 app.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
@@ -99,8 +99,7 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                     templateUrl: 'partials/category.html'
                 },
                 'leftContent' : {
-                    templateUrl: 'partials/side/categories.html',
-                    controller: 'categoryCategoriesCtrl'
+                    templateUrl: 'partials/side/management.html'
                 },
                 'rightContent' : {
                     templateUrl: 'partials/side/management.html'
@@ -113,9 +112,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
                 'menuContent' : {
                     templateUrl: 'partials/encodeTab.html'
                 },
+                'rightContent' : {
+                    templateUrl: 'partials/side/management.html'
+                },
                 'leftContent' : {
-                    templateUrl: 'partials/side/categories.html',
-                    controller: 'categoryCategoriesCtrl'
+                    templateUrl: 'partials/side/management.html'
                 }
                 
             }

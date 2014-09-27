@@ -16,23 +16,32 @@
             <div class="row" ng-repeat="item in list">
                 <div class="col">{{item.judoka.name}}</div>
                 <div class="col" ng-repeat="vs in list">
-                    <div ng-switch on="win(item.judoka.id,vs.judoka.id)">
+                    <div ng-init="score = win(item.judoka.id,vs.judoka.id)" ng-switch on="score.key">
                         <div ng-switch-when="-1" class="col black">
-                            impossible
+                            
                         </div>
                         <div ng-switch-when="0" class="col">
-                            not yet
+                            <a href="#/app/fight/{{score.id}}" >Encode</a>
                         </div>
                         <div ng-switch-when="1" class="col">
-                            one
-                        </div>
-                        <div ng-switch-when="2" class="col">
-                            two
+                            <div ng-class="{win: score.value.winner == item.judoka.id, fail: score.value.winner == vs.judoka.id}">
+                                {{bestScore(score.value)}}
+                            </div>
                         </div>
                         <div ng-switch-default class="col">
                             <!-- code to render the regular video block -->
                         </div>
                     </div>
+                </div>
+            </div>
+            <h2>Results</h2>
+            <div class="row" ng-repeat="item in list">
+                <div class="col">{{item.judoka.name}}</div>
+                <div class="col">
+                    {{item.fights}}
+                </div>
+                <div class="col">
+                    {{item.place}}
                 </div>
             </div>
         </div>

@@ -23,6 +23,7 @@ app.controller('CompetitionCtrl', function ($scope, $stateParams, Category, Cate
         $scope.categoriesList = data;
     }, function(msg){ alert(msg); });
     
+    $scope.categoriesPresent = [];
     CategoryCompetition.findCategories($idCompetiton).then(function(data){
         $scope.categoriesPresent = data;
     }, function(msg){ alert(msg); });
@@ -30,7 +31,7 @@ app.controller('CompetitionCtrl', function ($scope, $stateParams, Category, Cate
     $scope.encodeCategory = function(name){
         Category.getByName(name, true).then(function(id){
             CategoryCompetition.addCategory($idCompetiton, id).then(function(data){
-                $scope.categoriesPresent = data;
+                $scope.categoriesPresent.push(data);
             }, function(msg){ alert(msg); });
         }, function(msg){ alert(msg) });
     }
@@ -84,37 +85,77 @@ app.controller('TabCtrl', function ($scope, $stateParams, JudokaCompetition, Fig
     }, function(msg){ alert(msg) });
 });
 
-app.controller('PouleCtrl', function ($scope, $stateParams, JudokaCompetition, Fight){
+app.controller('PouleCtrl', function ($scope, $stateParams, $q, JudokaCompetition, Fight){
     $id = $stateParams.id;
     
     JudokaCompetition.getOne($id).then(function(data){
         
-        JudokaCompetition.findList(data.category_competition_id).then(function(data){
-            $scope.list = data;
-        }, 
-        function(msg){ alert(msg) });
-        
-        Fight.findList(data.category_competition_id).then(function(data){
-            $scope.tab = data;
-//            angular.forEach(data, function(value, key) {
-//                $scope.tab[value.white_id+'-'+value.blue_id] = value.white;
-//            });
+        Fight.findByCategory(data.category_competition_id).then(function(data){
+            var deferred = $q.defer();
+            $scope.tab = {};
+            angular.forEach(data, function(value, key) {
+                $scope.tab[value.white_id+'-'+value.blue_id] = value;
+                if(Object.keys($scope.tab).length == data.length){
+                    deferred.resolve(true);
+                }
+            });
+            return deferred.promise;
+        }, function(msg){ alert(msg) })
+        .then(function(bool){
+            JudokaCompetition.findList(data.category_competition_id).then(function(data){
+                $scope.list = data;
+            }, function(msg){ alert(msg) });
         }, function(msg){ alert(msg) });
+        
     }, function(msg){ alert(msg) });
-    
+//    
+//    $scope.win = function(one, two){
+//        if(one == two){
+//            return -1;
+//        }
+//        var key = one+'-'+two;
+//        var keyI = two+'-'+one;
+//        if($scope.tab[key] == 0 || $scope.tab[keyI] == 0){
+//            return 0;
+//        }
+//        return 1;
+//    }
     $scope.win = function(one, two){
         if(one == two){
-            return -1;
+            return {key :-1};
         }
         var key = one+'-'+two;
-        if($scope.tab[key] == one){
-            return 1;
+        var keyI = two+'-'+one;
+        var value = null;
+        if($scope.tab[key]){
+             value =  $scope.tab[key];
         }
-        if($scope.tab[key] == two){
-            return 2;
+        if($scope.tab[keyI]){
+            value = $scope.tab[keyI];
         }
-        return 0;
-    }  
+        if(value == null){
+            return {key :-1};
+        }
+        if(value.winner == 0){
+            return {key : 0, id: value.id};
+        }
+        return {key : 1, value: value};
+    }
+    
+    $scope.bestScore = function(value){
+        var score = ((value.winner == value.white_id)? value.score_white : value.score_blue);
+        
+        if(is_int(score % $tabScore["I"].pond)){
+            return "I";
+        }
+        if(is_int(score % $tabScore["W"].pond)){
+            return "W";
+        }
+        if(is_int(score % $tabScore["Y"].pond)){
+            return "Y";
+        }
+        return "A"
+    }
 });
 
 app.controller('encodeTabCtrl', function ($scope, $stateParams, $q, $window, Judoka, JudokaCompetition, CategoryCompetition, Fight){
@@ -253,11 +294,14 @@ app.controller('encodeTabCtrl', function ($scope, $stateParams, $q, $window, Jud
     }
 });
 
-app.controller('FightCtrl', function ($scope, $stateParams, $window, Fight){
+app.controller('FightCtrl', function ($scope, $stateParams, $window, Fight, CategoryCompetition){
     $id = $stateParams.id;
-    var tab = {"I" : {pond : 1000, max : 1}, "W" : {pond : 100, max : 2}, "Y" : {pond : 10, max : 9}, "P" : {pond : 1, max : 4}}
         
+    
     Fight.getOneWithJoin($id).then(function(data){
+        CategoryCompetition.getOne(data.category_competition_id).then(function(data){
+            $scope.categoryCompetition = data;
+        }, function(msg){ alert(msg) });
         $scope.fight = data;
 
         $scope.tabPoint = [];
@@ -266,7 +310,7 @@ app.controller('FightCtrl', function ($scope, $stateParams, $window, Fight){
         
         var w = data.score_white;
         var b = data.score_blue;
-        angular.forEach(tab, function(val, key) {
+        angular.forEach($tabScore, function(val, key) {
             $scope.tabPoint["scoreWhite"][key] = Math.floor(w/val.pond);
             w = w%val.pond;
             $scope.tabPoint["scoreBlue"][key] = Math.floor(b/val.pond);
@@ -283,7 +327,7 @@ app.controller('FightCtrl', function ($scope, $stateParams, $window, Fight){
         
     $scope.point = function(type, score, who){
         if(type == "+"){
-            if($scope.tabPoint[who][score] < tab[score].max){
+            if($scope.tabPoint[who][score] < $tabScore[score].max){
                 $scope.tabPoint[who][score] += 1;
                 $scope.win = whoWin();
             }
@@ -295,7 +339,7 @@ app.controller('FightCtrl', function ($scope, $stateParams, $window, Fight){
         }
     }
     function whoWin(){
-        for (var key in tab) {
+        for (var key in $tabScore) {
             if(key != 'P'){
                 if($scope.tabPoint['scoreWhite'][key] > $scope.tabPoint['scoreBlue'][key]){
                     return "1";
@@ -310,13 +354,20 @@ app.controller('FightCtrl', function ($scope, $stateParams, $window, Fight){
     $scope.save = function(){
         var scoreWhite = 0;
         var scoreBlue = 0;
-        for (var key in tab) {
-            scoreWhite += ($scope.tabPoint['scoreWhite'][key]*tab[key].pond);
-            scoreBlue += ($scope.tabPoint['scoreBlue'][key]*tab[key].pond);
+        for (var key in $tabScore) {
+            scoreWhite += ($scope.tabPoint['scoreWhite'][key]*$tabScore[key].pond);
+            scoreBlue += ($scope.tabPoint['scoreBlue'][key]*$tabScore[key].pond);
         }
         var win = ($scope.win == "1")? $scope.fight.white_id : $scope.fight.blue_id;
         Fight.updateFinish($id, scoreWhite, scoreBlue, win).then(function(data){
-            $window.location = '#/app/tab/'+$scope.fight.category_competition_id;
+            if($scope.categoryCompetition.number == 1){
+                $window.location = '#/app/poule/'+$scope.categoryCompetition.id;
+            }else if($scope.categoryCompetition.number == 2){
+                $window.location = '#/app/tab/'+$scope.categoryCompetition.id;
+            }else{
+                $window.location = '#/app/tab/'+$scope.categoryCompetition.id;
+            }
+            
         }, function(msg){ alert(msg) });
     }
 });
@@ -345,3 +396,13 @@ app.controller('categoryCategoriesCtrl', function ($scope, $stateParams, Categor
         }, function(msg){ alert(msg); });
     }, function(msg){ alert(msg); });
 });
+
+function is_int(value){
+  if((parseFloat(value) == parseInt(value)) && !isNaN(value)){
+      return true;
+  } else {
+      return false;
+  }
+}
+
+$tabScore = {"I" : {pond : 1000, max : 1}, "W" : {pond : 100, max : 2}, "Y" : {pond : 10, max : 9}, "P" : {pond : 1, max : 4}}

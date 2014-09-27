@@ -128,6 +128,7 @@ app.factory('DbFatory', function($q){
             return deferred.promise;
         },
         find : function(config){
+            factory.all(config);
             if(typeof(config.select)==='undefined') config.select = "*";
             if(typeof(config.where)==='undefined') config.where = "";
             if(typeof(config.order)==='undefined') config.order = "";
@@ -210,6 +211,7 @@ app.factory('DbFatory', function($q){
             return deferred.promise;
         },
         get : function(config){
+            factory.all(config);
             if(typeof(config.select)==='undefined') config.select = "*";
             if(typeof(config.data)==='undefined') config.data = [];
             if(typeof(config.where)==='undefined') config.where = "";
@@ -265,6 +267,7 @@ app.factory('DbFatory', function($q){
             return deferred.promise;
         },
         add : function(config){
+            factory.all(config);
             var deferred = $q.defer();
             $db.transaction(function(tx){
                 $sql = "INSERT INTO "+config.name+"(";
@@ -292,6 +295,7 @@ app.factory('DbFatory', function($q){
             return deferred.promise;
         },
         update : function(config){
+            factory.all(config);
             var deferred = $q.defer();
             $db.transaction(function(tx){
                 $sql = "UPDATE "+config.name;
@@ -482,8 +486,8 @@ app.factory('CategoryCompetition', function($q, DbFatory){
             config.params.competition_id = idCompetition;
             config.params.category_id = idCategory;
             DbFatory.add(config)
-                .then(function(){
-                        factory.findCategories(idCompetition).then(function(data){
+                .then(function(data){
+                        factory.getOne(data.insertId).then(function(data){
                             deferred.resolve(data);
                         }, function(msg){ deferred.reject(msg) });
                      },
@@ -1083,7 +1087,7 @@ app.factory('Fight', function($q, DbFatory, JudokaCompetition){
         updateFinish : function(id, scoreWhite, scoreBlue, win){
             var deferred = $q.defer();
             var config = factory.getMapping();     
-            config.set = "score_white = "+ scoreWhite +" AND score_blue = "+ scoreBlue +" AND winner = "+ win;
+            config.set = "score_white = "+ scoreWhite +", score_blue = "+ scoreBlue +", winner = "+ win;
             config.where = "id = "+ id;
             
             DbFatory.update(config).then(function(data){

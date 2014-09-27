@@ -1,3 +1,13 @@
 #encodeTabCtrl i{
     margin-left: 5px;
 }
+
+.black{
+    background: black;
+}
+.win{
+    background: green;
+}
+.fail{
+    background: red;
+}
