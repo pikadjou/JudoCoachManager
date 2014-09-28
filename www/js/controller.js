@@ -38,10 +38,13 @@ app.controller('CompetitionCtrl', function ($scope, $stateParams, Category, Cate
 });
 
 app.controller('CategoryCtrl', function ($scope, $stateParams, Judoka, JudokaCompetition, CategoryCompetition){
-    $id = $stateParams.id;
+    $id = $stateParams.id; /* id competiton */
       
      $scope.detail = false;
-     
+     CategoryCompetition.getOne($id).then(function(data){
+        $scope.categoryCompetition = data;
+    }, function(msg){ alert(msg); });
+
     JudokaCompetition.findEncode($id).then(function(data){
         $scope.judokaEncode = data;
     }, function(msg){ alert(msg); });
@@ -67,21 +70,19 @@ app.controller('CategoryCtrl', function ($scope, $stateParams, Judoka, JudokaCom
 });
 
 app.controller('TabCtrl', function ($scope, $stateParams, JudokaCompetition, Fight){
-    $id = $stateParams.id;
+    $id = $stateParams.id; /* id category_competition */
     
-    JudokaCompetition.getOne($id).then(function(data){
-        Fight.findByCategory(data.category_competition_id).then(function(data){
-            $scope.tab = {};
-            angular.forEach(data, function(value, key) {
-                if(!$scope.tab[value.type]){
-                    $scope.tab[value.type] = {};
-                }
-                $scope.tab[value.type][value.number] = {};
-                $scope.tab[value.type][value.number][1] = value.white;
-                $scope.tab[value.type][value.number][2] = value.blue;
-                $scope.tab[value.type][value.number]["fight"] = value;
-            });
-        }, function(msg){ alert(msg) });
+    Fight.findByCategory($id).then(function(data){
+        $scope.tab = {};
+        angular.forEach(data, function(value, key) {
+            if(!$scope.tab[value.type]){
+                $scope.tab[value.type] = {};
+            }
+            $scope.tab[value.type][value.number] = {};
+            $scope.tab[value.type][value.number][1] = value.white;
+            $scope.tab[value.type][value.number][2] = value.blue;
+            $scope.tab[value.type][value.number]["fight"] = value;
+        });
     }, function(msg){ alert(msg) });
 });
 
@@ -288,7 +289,7 @@ app.controller('encodeTabCtrl', function ($scope, $stateParams, $q, $window, Jud
 });
 
 app.controller('FightCtrl', function ($scope, $stateParams, $window, Fight, CategoryCompetition){
-    $id = $stateParams.id;
+    $id = $stateParams.id; /* id => id -> Fight */
         
     
     Fight.getOneWithJoin($id).then(function(data){

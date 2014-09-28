@@ -134,7 +134,6 @@ app.factory('DbFatory', function($q){
             if(typeof(config.order)==='undefined') config.order = "";
             if(typeof(config.data)==='undefined') config.data = [];
             if(typeof(config.join)==='undefined') config.join = false;
-//            console.log(config);
             var deferred = $q.defer();
             $db.transaction(function(tx){
                 var sql = "SELECT "+config.select+" FROM "+config.name;
@@ -216,7 +215,6 @@ app.factory('DbFatory', function($q){
             if(typeof(config.data)==='undefined') config.data = [];
             if(typeof(config.where)==='undefined') config.where = "";
             if(typeof(config.join)==='undefined') config.join = false;
-//            console.log(config);
             var deferred = $q.defer();
             
             $db.transaction(function(tx){
@@ -894,7 +892,7 @@ app.factory('Fight', function($q, DbFatory, JudokaCompetition){
             var deferred = $q.defer();
             var config = factory.getMapping();
             config.where = 'category_competition_id = '+ categrodyId;
-            config.order = 'type ASC, number ASC';
+            config.order = 'type DESC, number ASC';
             
             var join1 = {};
             join1.name = "white";
@@ -961,6 +959,14 @@ app.factory('Fight', function($q, DbFatory, JudokaCompetition){
             var deferred = $q.defer();
             var max = Object.keys(tab).length;
             
+            var log = Math.log(max) / Math.LN2;
+            if(!is_int(log)){
+                var nb = Math.ceil(log);
+                var maxT = Math.pow(2, nb);
+                for(var i = max+1; i <= maxT; i++){
+                    tab[i] = 0;
+                }
+            }
             var recursive = function(i){
                 if(i > max){
                     deferred.resolve(true);
@@ -1098,7 +1104,7 @@ app.factory('Fight', function($q, DbFatory, JudokaCompetition){
                           //deferred.resolve(data);
                     }, function(msg){ deferred.reject(msg); });
                     if(data.type != 0){
-                        factory.tryAdd(data.category_competition_id, win, (data.type%2 == 0)? 2 : 1 , data.type/2, Math.round(data.number/2)).then(function(data){
+                        factory.tryAdd(data.category_competition_id, win, (data.number%2 != 0)? 1 : 2 , data.type/2, Math.round(data.number/2)).then(function(data){
                               deferred.resolve(data);
                         }, function(msg){ deferred.reject(msg); });
                     }else{
