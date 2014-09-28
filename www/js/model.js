@@ -111,7 +111,7 @@ app.factory('DbFatory', function($q){
           }
         },
         all : function(config){
-//            console.log(config);
+            /*console.log(config);*/
             var deferred = $q.defer();
             $db.transaction(function(tx){
                 var sql = "SELECT * FROM "+config.name+' ORDER BY id;';
@@ -122,7 +122,7 @@ app.factory('DbFatory', function($q){
                         for (var i=0; i<results.rows.length; i++){
                             data[i] = results.rows.item(i);
                         }
-                        console.log(data);
+                        /*console.log(data);*/
                 });       
             });
             return deferred.promise;
@@ -487,7 +487,7 @@ app.factory('CategoryCompetition', function($q, DbFatory){
             config.params.category_id = idCategory;
             DbFatory.add(config)
                 .then(function(data){
-                        factory.getOne(data.insertId).then(function(data){
+                        factory.getCategory(data.insertId).then(function(data){
                             deferred.resolve(data);
                         }, function(msg){ deferred.reject(msg) });
                      },

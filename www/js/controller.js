@@ -54,7 +54,7 @@ app.controller('CategoryCtrl', function ($scope, $stateParams, Judoka, JudokaCom
     $scope.judokaNotEncode = [];
     JudokaCompetition.findNotEncode($id).then(function(data){
         $scope.judokaNotEncode = data.judoka_competition || [];
-    }, function(msg){ alert(msg); })    
+    }, function(msg){ alert(msg); });
     
     $scope.encodeJudoka = function(encode){
         Judoka.getByName(encode.name, {mine : 1, club : encode.club}).then(function(judoka){
@@ -108,18 +108,7 @@ app.controller('PouleCtrl', function ($scope, $stateParams, $q, JudokaCompetitio
         }, function(msg){ alert(msg) });
         
     }, function(msg){ alert(msg) });
-//    
-//    $scope.win = function(one, two){
-//        if(one == two){
-//            return -1;
-//        }
-//        var key = one+'-'+two;
-//        var keyI = two+'-'+one;
-//        if($scope.tab[key] == 0 || $scope.tab[keyI] == 0){
-//            return 0;
-//        }
-//        return 1;
-//    }
+
     $scope.win = function(one, two){
         if(one == two){
             return {key :-1};
@@ -159,11 +148,15 @@ app.controller('PouleCtrl', function ($scope, $stateParams, $q, JudokaCompetitio
 });
 
 app.controller('encodeTabCtrl', function ($scope, $stateParams, $q, $window, Judoka, JudokaCompetition, CategoryCompetition, Fight){
-    $id = $stateParams.id;
+    $id = $stateParams.id; //$id => id -> judokas_competitons
       
-    CategoryCompetition.getCategory($id).then(function(data){
-        $scope.category_competition = data;
+    JudokaCompetition.getOne($id).then(function(data){
+        CategoryCompetition.getCategory(data.category_competition_id).then(function(data){
+            $scope.category_competition = data;
+            console.log(data);
+        }, function(msg){ alert(msg); })
     }, function(msg){ alert(msg); })
+    
     
     Judoka.find().then(function(data){
         $scope.judokaList = data;
