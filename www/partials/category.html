@@ -43,12 +43,12 @@
             <ion-item ng-repeat="itemEncode in judokaEncode">
                 <div ng-switch on="itemEncode.category_competition.number">
                     <div ng-switch-when="1">
-                        <a  class="item" href="#/app/poule/{{itemEncode.id}}">
+                        <a  class="item" href="#/app/poule/{{categoryCompetition.id}}">
                           {{itemEncode.judoka.name}} - {{itemEncode.weigh}}kg
                         </a>
                     </div>
                     <div ng-switch-when="2">
-                        <a  class="item" href="#/app/tab/{{itemEncode.id}}">
+                        <a  class="item" href="#/app/tab/{{categoryCompetition.id}}">
                           {{itemEncode.judoka.name}} - {{itemEncode.weigh}}kg
                         </a>
                     </div>
