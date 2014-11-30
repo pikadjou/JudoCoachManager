@@ -10,29 +10,25 @@ function onDeviceReady() {
 // Alimentation de la base de données
 //
 function populateDB(tx) {
-/*
-    tx.executeSql('DROP TABLE IF EXISTS COMPETITIONS');
-    tx.executeSql('CREATE TABLE IF NOT EXISTS COMPETITIONS (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, created DATE);');
-    
 
-    tx.executeSql('DROP TABLE IF EXISTS CATEGORIES_COMPETITIONS');
+//    tx.executeSql('DROP TABLE IF EXISTS COMPETITIONS');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS COMPETITIONS (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, created DATE);');
+   
+//   tx.executeSql('DROP TABLE IF EXISTS CATEGORIES_COMPETITIONS');
     tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIES_COMPETITIONS (id INTEGER PRIMARY KEY AUTOINCREMENT, competition_id INTEGER, category_id INTEGER, number INTEGER);');
-*/ 
-/*
-    tx.executeSql('DROP TABLE IF EXISTS JUDOKAS_COMPETITIONS');
+
+//    tx.executeSql('DROP TABLE IF EXISTS JUDOKAS_COMPETITIONS');
     tx.executeSql('CREATE TABLE IF NOT EXISTS JUDOKAS_COMPETITIONS (id INTEGER PRIMARY KEY AUTOINCREMENT, category_competition_id INTEGER, judoka_id INTEGER, place INTEGER, number INTEGER, fights INTEGER, mine INTEGER, weigh TEXT);');
 
-    tx.executeSql('DROP TABLE IF EXISTS FIGHTS');
+//    tx.executeSql('DROP TABLE IF EXISTS FIGHTS');
     tx.executeSql("CREATE TABLE IF NOT EXISTS FIGHTS (id INTEGER PRIMARY KEY AUTOINCREMENT, category_competition_id INTEGER, type INTEGER, number INTEGER, white_id INTEGER, blue_id INTEGER, score_white INTEGER, score_blue INTEGER, winner INTEGER);");
- */
- /*   
-    tx.executeSql('DROP TABLE IF EXISTS JUDOKAS');
+  
+ //   tx.executeSql('DROP TABLE IF EXISTS JUDOKAS');
     tx.executeSql('CREATE TABLE IF NOT EXISTS JUDOKAS (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, club TEXT, mine INTEGER);');
 
-
-    tx.executeSql('DROP TABLE IF EXISTS CATEGORIES');
+//    tx.executeSql('DROP TABLE IF EXISTS CATEGORIES');
     tx.executeSql('CREATE TABLE IF NOT EXISTS CATEGORIES (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);');
-*/
+
 }
 // Fonction de callback en cas d'échec de la transaction
 //
@@ -58,7 +54,7 @@ function successCB() {
 //    });
 }
 onDeviceReady();
-var app = angular.module('judoapp', ['ngRoute', 'ionic', 'elif']);
+var app = angular.module('judoapp', ['ngRoute', 'ionic', 'elif', 'angular-datepicker']);
 
 app.config(function ($stateProvider, $urlRouterProvider) {
     $stateProvider
