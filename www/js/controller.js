@@ -1,16 +1,65 @@
-app.controller('HomeCtrl', function ($scope, $location, Competition){
+app.controller('HomeCtrl', function ($scope, $location, $ionicActionSheet, $ionicPopup, Competition){
+
+    $scope.form = {};
+    $scope.form.name = '';
+    $scope.form.date = null;
+
     $scope.list = Competition.find().then(function(data){
          $scope.list = data;
     }, function(msg){ alert(msg); });
     
-    $scope.encode = function(name){
+    $scope.encode = function(form){
+        console.log(form);
         var data = {
             "id": 0,
-            "name": name
+            "name": form.name
         }
-        Competition.addOne(data).then(function(data){
+        Competition.addOne(data, form.created).then(function(data){
             $location.path('/competition/'+data.insertId);
         }, function(msg){ alert(msg); });
+    }
+
+    $scope.setting = function(data) { 
+        var hideSheet = $ionicActionSheet.show({
+             buttons: [
+               { text: 'Rename' }
+             ],
+             destructiveText: 'Delete',
+             titleText: 'Modify',
+             cancelText: 'Cancel',
+             cancel: function() {
+                },
+             buttonClicked: function(index) {
+                console.log(data);
+
+                $scope.rename = data;
+
+               var renamePopup = $ionicPopup.show({
+                    template: '<input type="text" ng-model="rename.name"/><input type="text" pick-a-date="date" ng-model="rename.created"/> ',
+                    title: 'Enter name',
+                    scope: $scope,
+                    buttons: [
+                      { text: 'Cancel' },
+                      {
+                        text: '<b>Rename</b>',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            console.log(rename);
+                            if (name) {
+                                //don't allow the user to close
+                            e.preventDefault();
+                            } else {
+                                console.log("call db");
+                            }
+                        }
+                      },
+                    ]
+                });
+             },
+             destructiveButtonClicked: function(index){
+                console.log('destructif: '+index);
+             }  
+        });
     }
 });
 
@@ -87,27 +136,23 @@ app.controller('TabCtrl', function ($scope, $stateParams, JudokaCompetition, Fig
 });
 
 app.controller('PouleCtrl', function ($scope, $stateParams, $q, JudokaCompetition, Fight){
-    $id = $stateParams.id;
+    $id = $stateParams.id; /* id category_competition */
     
-    JudokaCompetition.getOne($id).then(function(data){
-        
-        Fight.findByCategory(data.category_competition_id).then(function(data){
-            var deferred = $q.defer();
-            $scope.tab = {};
-            angular.forEach(data, function(value, key) {
-                $scope.tab[value.white_id+'-'+value.blue_id] = value;
-                if(Object.keys($scope.tab).length == data.length){
-                    deferred.resolve(true);
-                }
-            });
-            return deferred.promise;
-        }, function(msg){ alert(msg) })
-        .then(function(bool){
-            JudokaCompetition.findList(data.category_competition_id).then(function(data){
-                $scope.list = data;
-            }, function(msg){ alert(msg) });
+    Fight.findByCategory($id).then(function(data){
+        var deferred = $q.defer();
+        $scope.tab = {};
+        angular.forEach(data, function(value, key) {
+            $scope.tab[value.white_id+'-'+value.blue_id] = value;
+            if(Object.keys($scope.tab).length == data.length){
+                deferred.resolve(true);
+            }
+        });
+        return deferred.promise;
+    }, function(msg){ alert(msg) })
+    .then(function(bool){
+        JudokaCompetition.findList($id).then(function(data){
+            $scope.list = data;
         }, function(msg){ alert(msg) });
-        
     }, function(msg){ alert(msg) });
 
     $scope.win = function(one, two){
@@ -232,7 +277,7 @@ app.controller('encodeTabCtrl', function ($scope, $stateParams, $q, $window, Jud
                 if(value.mine){
                     //update
                     Judoka.getByName(value.name).then(function(data){
-                        JudokaCompetition.updateJudoka($id, $category_competition.id, data.id, kKey, 1).then(function(data){
+                        JudokaCompetition.updateJudoka($scope.category_competition.id, $category_competition.id, data.id, kKey, 1).then(function(data){
 
                         }, function(msg){ alert(msg); });
                         $tab[kKey] = data.id;
@@ -263,7 +308,7 @@ app.controller('encodeTabCtrl', function ($scope, $stateParams, $q, $window, Jud
         }, function(msg){ alert(msg); })
         .then(function(data){
             Fight.addCategory($scope.type, $category_competition.id, $tab).then(function(data){
-                $window.location = '#/app/category/'+$id;
+                $window.location = '#/app/category/'+$scope.category_competition.id;
             }, function(msg){ alert(msg); });
         }, function(msg){ alert(msg); });
     }

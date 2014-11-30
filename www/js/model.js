@@ -128,7 +128,7 @@ app.factory('DbFatory', function($q){
             return deferred.promise;
         },
         find : function(config){
-            factory.all(config);
+/*            factory.all(config);*/
             if(typeof(config.select)==='undefined') config.select = "*";
             if(typeof(config.where)==='undefined') config.where = "";
             if(typeof(config.order)==='undefined') config.order = "";
@@ -210,7 +210,7 @@ app.factory('DbFatory', function($q){
             return deferred.promise;
         },
         get : function(config){
-            factory.all(config);
+/*            factory.all(config);*/
             if(typeof(config.select)==='undefined') config.select = "*";
             if(typeof(config.data)==='undefined') config.data = [];
             if(typeof(config.where)==='undefined') config.where = "";
@@ -265,7 +265,7 @@ app.factory('DbFatory', function($q){
             return deferred.promise;
         },
         add : function(config){
-            factory.all(config);
+/*            factory.all(config);*/
             var deferred = $q.defer();
             $db.transaction(function(tx){
                 $sql = "INSERT INTO "+config.name+"(";
@@ -285,6 +285,7 @@ app.factory('DbFatory', function($q){
                 
                 tx.executeSql($sql,$value,
                     function(tx, results){
+                        console.log(results.insertId);
                         deferred.resolve(results);
                     }, function (tx, err) { alert(err.message); console.log(err.message); deferred.reject("Erreur de traitement SQL : "+err.message); }
                 ),
@@ -333,12 +334,11 @@ app.factory('Competition', function($q, DbFatory){
                  );
             return deferred.promise;
         },
-        addOne : function(data){
+        addOne : function(data, created){
             var deferred = $q.defer();
             var config = factory.getMapping();
             config.params.name = data.name;
-            var d = new Date();
-            config.params.created = d.getTime();
+            config.params.created = new Date(created).getTime() || new Date().getTime();
             DbFatory.add(config)
                 .then(function(data){
                         deferred.resolve(data);

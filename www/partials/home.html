@@ -6,13 +6,17 @@
         <button class="button button-block button-positive" ng-click="new=!new">New competition</button>
         <div class="list" ng-show="new">
             <label class="item item-input">
-              <input type="text" ng-model="name" placeholder="New competition"/>
+              <input type="text" ng-model="form.name" placeholder="New competition" />
             </label>
-            <button class="button button-block button-positive" ng-click="encode(name)">Created</button>
+            <label class="item item-input">
+                <input type="text" pick-a-date="form.created" placeholder="Select Date"/> 
+            </label>
+            <button class="button button-block button-positive" ng-click="encode(form)">Created</button>
         </div>
         <ion-list>
-            <ion-item ng-repeat="item in list" href="#/app/competition/{{item.id}}">
-              {{item.name}} / {{item.created}}
+            <ion-item ng-repeat="item in list">
+              <button class="button button-clear button-positive" href="#/app/competition/{{item.id}}">{{item.name}} / {{item.created | date : format : timezone}}</button>
+              <span ng-click="setting(item)"><i class="icon ion-gear-a"></i></span>
             </ion-item>
         </ion-list>
     </ion-content>
