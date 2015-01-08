@@ -1,11 +1,12 @@
-app.controller('HomeCtrl', function ($scope, $location, $ionicActionSheet, $ionicPopup, Competition){
+app.controller('HomeCtrl', function ($scope, $location, $ionicActionSheet, $ionicPopover, Competition){
 
     $scope.form = {};
     $scope.form.name = '';
     $scope.form.date = null;
 
+    $scope.list = {};
     $scope.list = Competition.find().then(function(data){
-         $scope.list = data;
+         $scope.list = angular.copy(data);
     }, function(msg){ alert(msg); });
     
     $scope.encode = function(form){
@@ -15,52 +16,18 @@ app.controller('HomeCtrl', function ($scope, $location, $ionicActionSheet, $ioni
             "name": form.name
         }
         Competition.addOne(data, form.created).then(function(data){
-            $location.path('/competition/'+data.insertId);
+            $location.path('#/app/competition/'+data.insertId);
         }, function(msg){ alert(msg); });
     }
 
-    $scope.setting = function(data) { 
-        var hideSheet = $ionicActionSheet.show({
-             buttons: [
-               { text: 'Rename' }
-             ],
-             destructiveText: 'Delete',
-             titleText: 'Modify',
-             cancelText: 'Cancel',
-             cancel: function() {
-                },
-             buttonClicked: function(index) {
-                console.log(data);
-
-                $scope.rename = data;
-
-               var renamePopup = $ionicPopup.show({
-                    template: '<input type="text" ng-model="rename.name"/><input type="text" pick-a-date="date" ng-model="rename.created"/> ',
-                    title: 'Enter name',
-                    scope: $scope,
-                    buttons: [
-                      { text: 'Cancel' },
-                      {
-                        text: '<b>Rename</b>',
-                        type: 'button-positive',
-                        onTap: function(e) {
-                            console.log(rename);
-                            if (name) {
-                                //don't allow the user to close
-                            e.preventDefault();
-                            } else {
-                                console.log("call db");
-                            }
-                        }
-                      },
-                    ]
-                });
-             },
-             destructiveButtonClicked: function(index){
-                console.log('destructif: '+index);
-             }  
-        });
+    $scope.update = function(item){
+        Competition.update(item);
     }
+    $scope.remove = function(item){
+        $scope.list.splice($scope.list.indexOf(item), 1);
+        Competition.remove(item);
+    }
+
 });
 
 app.controller('CompetitionCtrl', function ($scope, $stateParams, Category, CategoryCompetition){
@@ -74,7 +41,7 @@ app.controller('CompetitionCtrl', function ($scope, $stateParams, Category, Cate
     
     $scope.categoriesPresent = [];
     CategoryCompetition.findCategories($idCompetiton).then(function(data){
-        $scope.categoriesPresent = data;
+        $scope.categoriesPresent = angular.copy(data);
     }, function(msg){ alert(msg); });
     
     $scope.encodeCategory = function(name){
@@ -83,6 +50,14 @@ app.controller('CompetitionCtrl', function ($scope, $stateParams, Category, Cate
                 $scope.categoriesPresent.push(data);
             }, function(msg){ alert(msg); });
         }, function(msg){ alert(msg) });
+    }
+
+    $scope.update = function(category){
+        category.category.name = "test";
+    }
+    $scope.remove = function(category){
+        $scope.list.splice($scope.list.indexOf(item), 1);
+        Competition.remove(item);
     }
 });
 

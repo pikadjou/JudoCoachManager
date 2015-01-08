@@ -128,7 +128,6 @@ app.factory('DbFatory', function($q){
             return deferred.promise;
         },
         find : function(config){
-/*            factory.all(config);*/
             if(typeof(config.select)==='undefined') config.select = "*";
             if(typeof(config.where)==='undefined') config.where = "";
             if(typeof(config.order)==='undefined') config.order = "";
@@ -210,7 +209,6 @@ app.factory('DbFatory', function($q){
             return deferred.promise;
         },
         get : function(config){
-/*            factory.all(config);*/
             if(typeof(config.select)==='undefined') config.select = "*";
             if(typeof(config.data)==='undefined') config.data = [];
             if(typeof(config.where)==='undefined') config.where = "";
@@ -265,7 +263,7 @@ app.factory('DbFatory', function($q){
             return deferred.promise;
         },
         add : function(config){
-/*            factory.all(config);*/
+
             var deferred = $q.defer();
             $db.transaction(function(tx){
                 $sql = "INSERT INTO "+config.name+"(";
@@ -312,6 +310,25 @@ app.factory('DbFatory', function($q){
                 function (tx, err) { alert(err.message); console.log(err.message); deferred.reject("Erreur de traitement SQL : "+err); }
             });
             return deferred.promise;
+        },
+        remove : function(config){
+            factory.all(config);
+            var deferred = $q.defer();
+            $db.transaction(function(tx){
+                $sql = "DELETE FROM "+config.name;
+                $sql = $sql.concat(" WHERE "+config.where);
+                $sql = $sql.concat(";");
+                console.log($sql);
+                
+                tx.executeSql($sql,[],
+                    function(tx, results){
+                        console.log(results.rowsAffected);
+                        deferred.resolve(results);
+                    }, function (tx, err) { alert(err.message); console.log(err.message); deferred.reject("Erreur de traitement SQL : "+err.message); }
+                ),
+                function (tx, err) { alert(err.message); console.log(err.message); deferred.reject("Erreur de traitement SQL : "+err); }
+            });
+            return deferred.promise;
         }
     }
     return factory;
@@ -345,6 +362,35 @@ app.factory('Competition', function($q, DbFatory){
                      },
                      function(msg){ deferred.reject(msg); } 
                  );
+            return deferred.promise;
+        },
+        update : function(data){
+            var deferred = $q.defer();
+
+            var config = factory.getMapping();
+            config.set = "name = '"+ data.name+"', created = "+ new Date(data.created).getTime() || new Date().getTime();
+            config.where = "id = "+ data.id;
+            
+            DbFatory.update(config)
+                .then(function(data){
+                    deferred.resolve(data);
+                },
+                function(msg){ deferred.reject(msg); } 
+            );
+            return deferred.promise;
+        },
+        remove : function(data){
+            var deferred = $q.defer();
+
+            var config = factory.getMapping();
+            config.where = "id = "+ data.id;
+            
+            DbFatory.remove(config)
+                .then(function(data){
+                    deferred.resolve(data);
+                },
+                function(msg){ deferred.reject(msg); } 
+            );
             return deferred.promise;
         }
     }

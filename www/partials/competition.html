@@ -7,16 +7,44 @@
         <div class="list" ng-show="new">
             <label class="item item-input">
                 <input type="text" placeholder="Add category" list="category" ng-model="category" />
-                <datalist id="category">
-                    <option data-ng-repeat="item in categoriesList" value="{{item.name}}" />
-                </datalist>
             </label>
             <button class="button button-block button-positive" ng-click="encodeCategory(category)">Add</button>
         </div>
         <ion-list>
-            <ion-item ng-repeat="cat in categoriesPresent" class="item" href="#/app/category/{{cat.id}}">
-              {{cat.category.name}}
+            <ion-item ng-repeat="cat in categoriesPresent" class="item" >
+                <div class="row" ng-init="cat.detail = false; cat.edit = false">
+                    <div class="col-90 col">
+                        <a class="button button-clear button-positive" href="#/app/category/{{cat.id}}" ng-show="!cat.edit">
+                            {{cat.category.name}}
+                        </a>
+                        <label class="item item-input" ng-show="cat.edit">
+                            <input type="text" list="category" ng-model="cat.category.name" />
+                        </label>
+                    </div>
+                    <div class="col-10 col col-center">
+                        <span ng-click="cat.detail = !cat.detail; cat.edit = false"><i class="fa fa-cog fa-2x"></i></span>
+                    </div>
+                </div>
+                <div class="row" ng-show="cat.detail">
+                    <div class="col-50 col">
+                        <button class="button button-positive" ng-show="!cat.edit" ng-click="cat.edit=!cat.edit">
+                            edit
+                        </button>
+                        <button class="button button-positive" ng-show="cat.edit" ng-click="cat.edit=!cat.edit; update(cat)">
+                            save
+                        </button>
+                    </div>
+                    <div class="col-50 col">
+                        <button class="button button-positive" ng-click="remove(cat)">
+                            delete
+                        </button>
+                    </div>
+                    </div>
             </ion-item>
         </ion-list>
+
+        <datalist id="category">
+            <option data-ng-repeat="item in categoriesList" value="{{item.name}}" />
+        </datalist>
     </ion-content>
 </ion-view>
