@@ -11,9 +11,6 @@
             <div class="row">
                 <div class="col col-75">
                     <input type="text" placeholder="Add judoka" list="judoka" ng-model="encode.name" />
-                    <datalist id="judoka">
-                        <option data-ng-repeat="mine in judokaMine" value="{{mine.name}}" />
-                    </datalist>
                 </div>
                 <div class="col col-25">
                     <button class="button" ng-click="detail=!detail">
@@ -34,8 +31,42 @@
         </div>
         <div class="item item-divider">Need encode</div>
         <ion-list>
-            <ion-item ng-repeat="item in judokaNotEncode" class="item" href="#/app/encodeTab/{{item.id}}">
-              {{item.judoka.name}} - {{item.weigh}}kg
+            <ion-item ng-repeat="item in judokaNotEncode" class="item">
+                <div class="row" ng-init="item.detail = false; item.edit = false">
+                    <div class="col-90 col">
+                        <a class="button button-clear button-positive" href="#/app/encodeTab/{{item.id}}" ng-show="!item.edit">
+                            {{item.judoka.name}} - {{item.weigh}}kg
+                        </a>
+                        <label class="item item-input" ng-show="item.edit">
+                            <div class="row">
+                                <div class="col col-50">
+                                    <input type="text" list="judoka" ng-model="item.judoka.name" />
+                                </div>
+                                <div class="col col-50">
+                                    <input type="text" ng-model="item.weigh" />
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="col-10 col col-center">
+                        <span ng-click="item.detail = !item.detail; item.edit = false"><i class="fa fa-cog fa-2x"></i></span>
+                    </div>
+                </div>
+                <div class="row" ng-show="item.detail">
+                    <div class="col-50 col">
+                        <button class="button button-positive" ng-show="!item.edit" ng-click="item.edit=!item.edit">
+                            edit
+                        </button>
+                        <button class="button button-positive" ng-show="item.edit" ng-click="item.edit=!item.edit; update(item)">
+                            save
+                        </button>
+                    </div>
+                    <div class="col-50 col">
+                        <button class="button button-positive" ng-click="remove(item)">
+                            delete
+                        </button>
+                    </div>
+                </div>
             </ion-item>
         </ion-list>
         <div class="item item-divider">In fight</div>
@@ -55,5 +86,9 @@
                 </div>
             </ion-item>
         </ion-list>
+
+        <datalist id="judoka">
+            <option data-ng-repeat="mine in judokaMine" value="{{mine.name}}" />
+        </datalist>
     </ion-content>
 </ion-view>

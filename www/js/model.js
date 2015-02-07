@@ -554,6 +554,35 @@ app.factory('CategoryCompetition', function($q, DbFatory){
                      function(msg){ deferred.reject(msg); } 
                  );
             return deferred.promise;
+        },
+        updateCategory : function(id, idCategory){
+            var deferred = $q.defer();
+
+            var config = factory.getMapping();
+            config.set = "category_id = '"+ idCategory+"'";
+            config.where = "id = "+ id;
+            
+            DbFatory.update(config)
+                .then(function(data){
+                    deferred.resolve(data);
+                },
+                function(msg){ deferred.reject(msg); } 
+            );
+            return deferred.promise;
+        },
+        remove : function(data){
+            var deferred = $q.defer();
+
+            var config = factory.getMapping();
+            config.where = "id = "+ data.id;
+            
+            DbFatory.remove(config)
+                .then(function(data){
+                    deferred.resolve(data);
+                },
+                function(msg){ deferred.reject(msg); } 
+            );
+            return deferred.promise;
         }
     }
     return factory;
@@ -742,6 +771,21 @@ app.factory('JudokaCompetition', function($q, DbFatory, CategoryCompetition){
             
             return deferred.promise;
         },
+        updateCompetitionJudoka : function(id, judokaId, weigh){
+            weigh = weigh || 0;
+            var deferred = $q.defer();
+            var config = factory.getMapping();
+            config.set = "judoka_id = "+ judokaId+", weigh = "+ weigh;
+            config.where = "id = "+ id;
+            
+            DbFatory.update(config)
+                .then(function(data){
+                        deferred.resolve(data);
+                     },
+                     function(msg){ deferred.reject(msg); } 
+                 );
+            return deferred.promise;
+        },
         addJudoka : function(id, judokaId, mine, number, weigh){
             number = TestNull(number, 0);
             mine = TestNull(mine, 0);
@@ -763,6 +807,20 @@ app.factory('JudokaCompetition', function($q, DbFatory, CategoryCompetition){
                      },
                      function(msg){ deferred.reject(msg); } 
                  );
+            return deferred.promise;
+        },
+        removeCompetitionJudoka : function(id){
+            var deferred = $q.defer();
+
+            var config = factory.getMapping();
+            config.where = "id = "+ id;
+            
+            DbFatory.remove(config)
+                .then(function(data){
+                    deferred.resolve(data);
+                },
+                function(msg){ deferred.reject(msg); } 
+            );
             return deferred.promise;
         }
     }

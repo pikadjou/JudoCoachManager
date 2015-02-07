@@ -53,11 +53,22 @@ app.controller('CompetitionCtrl', function ($scope, $stateParams, Category, Cate
     }
 
     $scope.update = function(category){
-        category.category.name = "test";
+
+        var name = category.category.name;
+        Category.getByName(name, true).then(function(idCat){
+            CategoryCompetition.updateCategory(category.id, idCat).then(function(data){
+                category = data;
+                Category.getByName(name, false).then(function(cat){
+                    category.category = cat;
+                }, function(msg){ alert(msg); });
+            }, function(msg){ alert(msg); });
+        }, function(msg){ alert(msg) });
+
     }
     $scope.remove = function(category){
-        $scope.list.splice($scope.list.indexOf(item), 1);
-        Competition.remove(item);
+        CategoryCompetition.remove(category).then(function(data){
+            $scope.categoriesPresent.splice($scope.categoriesPresent.indexOf(category), 1);
+        }, function(msg){ alert(msg); });
     }
 });
 
@@ -80,16 +91,29 @@ app.controller('CategoryCtrl', function ($scope, $stateParams, Judoka, JudokaCom
 
     $scope.judokaNotEncode = [];
     JudokaCompetition.findNotEncode($id).then(function(data){
-        $scope.judokaNotEncode = data.judoka_competition || [];
+        $scope.judokaNotEncode = angular.copy(data.judoka_competition || []);
     }, function(msg){ alert(msg); });
     
     $scope.encodeJudoka = function(encode){
         Judoka.getByName(encode.name, {mine : 1, club : encode.club}).then(function(judoka){
             JudokaCompetition.addJudoka($id, judoka.id, 1, 0, encode.weigh).then(function(data){
-                data.judoka = judoka;
-                $scope.judokaNotEncode.push(data);
+                data.judoka = angular.copy(judoka);
+                $scope.judokaNotEncode.push(angular.copy(data));
             }, function(msg){ alert(msg); });
         }, function(msg){ alert(msg) });
+    }
+
+    $scope.update = function(item){
+        Judoka.getByName(item.judoka.name, {mine : 1}).then(function(judoka){
+            JudokaCompetition.updateCompetitionJudoka(item.id, judoka.id, item.weigh).then(function(data){
+                item.judoka = angular.copy(judoka);
+            }, function(msg){ alert(msg); });
+        }, function(msg){ alert(msg) });
+    }
+    $scope.remove = function(item){
+        JudokaCompetition.removeCompetitionJudoka(item.id).then(function(data){
+            $scope.judokaNotEncode.splice($scope.judokaNotEncode.indexOf(item), 1);
+        }, function(msg){ alert(msg); });
     }
 });
 
