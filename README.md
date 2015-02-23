@@ -1,3 +1,0 @@
-judocachmanager
-===============
-Test versionning
