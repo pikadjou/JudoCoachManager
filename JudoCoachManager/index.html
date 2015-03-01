@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html ng-app="coachapp" data-framework="typescript">
 <head>
     <meta charset="utf-8" />
     <title>JudoCoachManager</title>
@@ -9,14 +9,39 @@
     <link href="Content/ionic.min.css" rel="stylesheet" />
 </head>
 <body>
-    <p>Hello, your application is ready!</p>
+    <div id="Header" class="bar bar-header bar-positive">
+        <h1 class="title">Judo Coach Manager</h1>
+    </div>
+    <div id="Content">
+        <ion-nav-view name="menuContent"></ion-nav-view>
+    </div>
+    <div id="Footer" class="tabs tabs-icon-only">
+        <a class="tab-item" href="#/coachapp/home">
+            <i class="icon ion-home"></i>
+        </a>
+        <a class="tab-item">
+            <i class="icon ion-star"></i>
+        </a>
+        <a class="tab-item">
+            <i class="icon ion-gear-a"></i>
+        </a>
+    </div>
 
     <!-- Cordova reference, this is added to your app when it's built. -->
     <script src="cordova.js"></script>
     <script src="scripts/platformOverrides.js"></script>
 
-    <script src="scripts/framework/angular/angular.js"></script>
-    <script src="scripts/framework/ionic/ionic.js"></script>
+    <script src="scripts/framework/angular/angular.min.js"></script>
+    <script src="scripts/framework/angular/angular-animate.min.js"></script>
+    <script src="scripts/framework/angular/angular-sanitize.min.js"></script>
+    <script src="scripts/framework/angular/angular-resource.min.js"></script>
+    <script src="scripts/framework/angular/angular-route.min.js"></script>
+    <script src="scripts/framework/ionic/ionic.min.js"></script>
+    <script src="scripts/framework/ionic/ionic-angular.min.js"></script>
+    <script src="scripts/framework/ionic/ionic.bundle.min.js"></script>
+    <script src="scripts/framework/elif/elif.js"></script>
+    <script src="scripts/framework/angular/angular-datepicker.min.js"></script>
     <script src="scripts/index.js"></script>
+    <script src="scripts/app/controller/HomeCtrl.js"></script>
 </body>
 </html>

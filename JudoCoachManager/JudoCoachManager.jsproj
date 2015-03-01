@@ -113,6 +113,17 @@
     <Content Include="fonts\ionicons.svg" />
     <Content Include="fonts\ionicons.ttf" />
     <Content Include="fonts\ionicons.woff" />
+    <Content Include="scripts\app\view\about.html" />
+    <Content Include="scripts\app\view\category.html" />
+    <Content Include="scripts\app\view\competition.html" />
+    <Content Include="scripts\app\view\encodeTab.html" />
+    <Content Include="scripts\app\view\fight.html" />
+    <Content Include="scripts\app\view\home.html" />
+    <Content Include="scripts\app\view\index.html" />
+    <Content Include="scripts\app\view\poule.html" />
+    <Content Include="scripts\app\view\side\categories.html" />
+    <Content Include="scripts\app\view\side\management.html" />
+    <Content Include="scripts\app\view\tab.html" />
     <Content Include="scripts\errors.json" />
     <Content Include="scripts\framework\angular\angular-animate.js" />
     <Content Include="scripts\framework\angular\angular-animate.min.js" />
@@ -124,6 +135,7 @@
     <Content Include="scripts\framework\angular\angular-cookies.min.js" />
     <Content Include="scripts\framework\angular\angular-cookies.min.js.map" />
     <Content Include="scripts\framework\angular\angular-csp.css" />
+    <Content Include="scripts\framework\angular\angular-datepicker.min.js" />
     <Content Include="scripts\framework\angular\angular-loader.js" />
     <Content Include="scripts\framework\angular\angular-loader.min.js" />
     <Content Include="scripts\framework\angular\angular-loader.min.js.map" />
@@ -149,6 +161,7 @@
     <Content Include="scripts\framework\angular\angular.js" />
     <Content Include="scripts\framework\angular\angular.min.js" />
     <Content Include="scripts\framework\angular\angular.min.js.map" />
+    <Content Include="scripts\framework\elif\elif.js" />
     <Content Include="scripts\framework\ionic\ionic-angular.js" />
     <Content Include="scripts\framework\ionic\ionic-angular.min.js" />
     <Content Include="scripts\framework\ionic\ionic.bundle.js" />
@@ -918,13 +931,14 @@
     <Folder Include="res\screens\ios\" />
     <Folder Include="res\screens\windows\" />
     <Folder Include="res\screens\wp8\" />
-    <Folder Include="scripts\app\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="index.html" />
+    <TypeScriptCompile Include="scripts\app\controller\HomeCtrl.ts" />
+    <TypeScriptCompile Include="scripts\app\_all.ts" />
     <TypeScriptCompile Include="scripts\index.ts" />
     <TypeScriptCompile Include="scripts\platformOverrides.ts" />
     <Content Include="css\index.css" />
@@ -976,6 +990,7 @@
     <Content Include="res\screens\windows\splashscreen.png" />
     <Content Include="res\screens\windows\SplashScreen.scale-240.png" />
     <Content Include="res\screens\wp8\screen-portrait.jpg" />
+    <TypeScriptCompile Include="scripts\typings\angular-ui\angular-ui-router.d.ts" />
     <TypeScriptCompile Include="scripts\typings\angular\angular.d.ts" />
     <TypeScriptCompile Include="scripts\typings\cordova-ionic\cordova-ionic.d.ts" />
     <TypeScriptCompile Include="scripts\typings\cordova-ionic\plugins\keyboard.d.ts" />
@@ -1005,7 +1020,7 @@
     <DefaultReferenceGroup>Implicit (Multi-Device Apps)</DefaultReferenceGroup>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <TypeScriptCompileOnSaveEnabled>false</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptCompileOnSaveEnabled>true</TypeScriptCompileOnSaveEnabled>
     <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
   </PropertyGroup>

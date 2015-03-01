@@ -1,0 +1,94 @@
+<ion-view title="{{competition.category.name}}" ng-controller="CategoryCtrl">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button menu-toggle="right" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content class="has-header">
+        <button class="button button-block button-positive" ng-click="new=!new">New judoka</button>
+        <div class="list" ng-show="new">
+            <div class="row">
+                <div class="col col-75">
+                    <input type="text" placeholder="Add judoka" list="judoka" ng-model="encode.name" />
+                </div>
+                <div class="col col-25">
+                    <button class="button" ng-click="detail=!detail">
+                        <span ng-show="!detail">More details</span>
+                        <span ng-show="detail">Less details</span>
+                    </button>
+                </div>
+            </div>
+            <div class="row" ng-show="detail">
+                <div class="col col-50">
+                    <input type="number" placeholder="Weigh" ng-model="encode.weigh" />
+                </div>
+                <div class="col col-50">
+                    <input type="text" placeholder="Club" ng-model="encode.club" />
+                </div>
+            </div>
+            <button class="button button-block button-positive" ng-click="encodeJudoka(encode); encode = {}">Add</button>
+        </div>
+        <div class="item item-divider">Need encode</div>
+        <ion-list>
+            <ion-item ng-repeat="item in judokaNotEncode" class="item">
+                <div class="row" ng-init="item.detail = false; item.edit = false">
+                    <div class="col-90 col">
+                        <a class="button button-clear button-positive" href="#/app/encodeTab/{{item.id}}" ng-show="!item.edit">
+                            {{item.judoka.name}} - {{item.weigh}}kg
+                        </a>
+                        <label class="item item-input" ng-show="item.edit">
+                            <div class="row">
+                                <div class="col col-50">
+                                    <input type="text" list="judoka" ng-model="item.judoka.name" />
+                                </div>
+                                <div class="col col-50">
+                                    <input type="text" ng-model="item.weigh" />
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="col-10 col col-center">
+                        <span ng-click="item.detail = !item.detail; item.edit = false"><i class="fa fa-cog fa-2x"></i></span>
+                    </div>
+                </div>
+                <div class="row" ng-show="item.detail">
+                    <div class="col-50 col">
+                        <button class="button button-positive" ng-show="!item.edit" ng-click="item.edit=!item.edit">
+                            edit
+                        </button>
+                        <button class="button button-positive" ng-show="item.edit" ng-click="item.edit=!item.edit; update(item)">
+                            save
+                        </button>
+                    </div>
+                    <div class="col-50 col">
+                        <button class="button button-positive" ng-click="remove(item)">
+                            delete
+                        </button>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+        <div class="item item-divider">In fight</div>
+        <ion-list>
+            <ion-item ng-repeat="itemEncode in judokaEncode">
+                <div ng-switch on="itemEncode.category_competition.number">
+                    <div ng-switch-when="1">
+                        <a  class="item" href="#/app/poule/{{itemEncode.category_competition.id}}">
+                          {{itemEncode.judoka.name}} - {{itemEncode.weigh}}kg
+                        </a>
+                    </div>
+                    <div ng-switch-when="2">
+                        <a  class="item" href="#/app/tab/{{itemEncode.category_competition.id}}">
+                          {{itemEncode.judoka.name}} - {{itemEncode.weigh}}kg
+                        </a>
+                    </div>
+                </div>
+            </ion-item>
+        </ion-list>
+
+        <datalist id="judoka">
+            <option data-ng-repeat="mine in judokaMine" value="{{mine.name}}" />
+        </datalist>
+    </ion-content>
+</ion-view>

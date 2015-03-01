@@ -1,0 +1,179 @@
+<ion-view title="Encodage" ng-controller="encodeTabCtrl" id="encodeTabCtrl">
+    <ion-nav-buttons side="left">
+        <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+    </ion-nav-buttons>
+    <ion-content direction="xy" class="has-header">
+        <div>
+            <ion-radio ng-model="type" ng-value="'1'" ng-click="encodeType(1)"><i class="fa fa-list-alt"></i></ion-radio>
+            <ion-radio ng-model="type" ng-value="'2'" ng-click="encodeType(2)"><i class="fa fa-sitemap"></i></ion-radio>
+            <!-- <ion-radio ng-model="type" ng-click="encodeType(1)"><i class="fa fa-list-alt"></i> + <i class="fa fa-sitemap"></i></ion-radio> -->
+        </div>
+        <div class="item item-divider">
+            Judoka's list
+        </div>
+        <div>
+            <div class="row">
+                <div class="col">
+                    Name (Mine)
+                </div>
+                <div class="col">
+                    Club
+                </div>
+                <div class="col">
+                    Weigh
+                </div>
+                <div class="col">
+                    <button class="button button-icon icon ion-ios7-trash" 
+                        ng-click="data.showDelete = !data.showDelete; data.showReorder = false">
+                    </button>
+                    <button class="button button-icon icon ion-arrow-swap"
+                        ng-click="data.showDelete = false; data.showReorder = !data.showReorder">
+                    </button>
+                </div>
+            </div>
+
+            <ion-list show-delete="data.showDelete" show-reorder="data.showReorder">
+                <div ng-repeat="judoka in list">
+                    <ion-item>
+                        <div class="row">
+                            <div class="col" ng-show="!judoka.edit">
+                                {{judoka.name}}<i class="ion-checkmark-round" ng-show="{{judoka.mine}}"></i>
+                            </div>
+                            <div class="col" ng-show="judoka.edit">
+                                <input type="text" list="judoka" ng-model="judoka.name" placeholder="{{judoka.name}}">
+                                <label style="margin-left: -35px;" class="toggle toggle-balanced">
+                                    <input type="checkbox" ng-model="judoka.mine">
+                                    <div class="track">
+                                      <div class="handle"></div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="col" ng-show="!judoka.edit">
+                                {{judoka.club}}
+                            </div>
+                            <div class="col" ng-show="judoka.edit">
+                                <input type="text"  ng-model="judoka.club" placeholder="{{judoka.club}}">
+                            </div>
+                            <div class="col" ng-show="!judoka.edit">
+                                {{judoka.weigh}}
+                            </div>
+                            <div class="col" ng-show="judoka.edit">
+                                <input type="text" ng-model="judoka.weigh" placeholder="{{judoka.weigh}}">
+                            </div>
+                            <div class="col">
+                                <div class="ion-ios7-compose-outline" ng-show="!judoka.edit"
+                                            ng-click="judoka.edit = true">
+                                    Edit
+                                </div>
+                                <div class="ion-ios7-compose-outline" ng-show="judoka.edit"
+                                            ng-click="judoka.edit = false; edit($index, judoka)">
+                                    Save
+                                </div>
+                            </div>
+                        </div>
+                         <ion-delete-button class="ion-ios7-trash" 
+                                            ng-click="onItemDelete(judoka)">
+                         </ion-delete-button>
+                         
+                         <ion-reorder-button class="ion-navicon" on-reorder="moveItem(judoka, $fromIndex, $toIndex)"></ion-reorder-button>
+                    </ion-item>
+                    <div class="item item-divider" ng-show="show($index)"></div>
+                </div>
+            </ion-list>
+            <button class="button button-block button-positive" ng-click="save()" ng-show="list.length > 0">
+                Save
+            </button>
+            
+            <form ng-hide="formHide" ng-submit="add()">
+                <div class="row">
+                    <div class="col-50">
+                        judoka's name
+                    </div>
+                    <div class="col">
+                        Mine
+                    </div>
+                    <div class="col">
+                        Unknown
+                    </div>
+                    <div class="col">
+                        Details
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-50">
+                        <input type="text" list="judoka" ng-model="form.oneText" placeholder="White">
+                    </div>
+                    <div class="col">
+                        <label style="margin-left: -35px;" class="toggle toggle-balanced">
+                            <input type="checkbox" ng-model="form.oneMine">
+                            <div class="track">
+                              <div class="handle"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label class="toggle toggle-assertive" ng-show="!form.oneMine">
+                            <input type="checkbox" ng-model="form.oneUnknown">
+                            <div class="track">
+                              <div class="handle"></div>
+                            </div>
+                        </label>
+                    </div>
+                     <div class="col">
+                        <button type="button" class="button" ng-click="detailOne=!detailOne">
+                            <span ng-show="!detailOne">More details</span>
+                            <span ng-show="detailOne">Less details</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row" ng-show="detailOne">
+                    <div class="col">
+                        <input type="text" ng-model="form.oneClub" placeholder="White club">
+                    </div>
+                    <div class="col">
+                        <input type="number" ng-model="form.oneWeigh" placeholder="White weigh">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-50">
+                        <input type="text" list="judoka" ng-model="form.twoText" placeholder="Blue">
+                    </div>
+                    <div class="col">
+                        <label style="margin-left: -35px;" class="toggle toggle-balanced">
+                          <input type="checkbox" ng-model="form.twoMine">
+                          <div class="track">
+                            <div class="handle"></div>
+                          </div>
+                        </label>
+                    </div>
+                    <div class="col">
+                        <label class="toggle toggle-assertive" ng-show="!form.twoMine">
+                          <input type="checkbox" ng-model="form.twoUnknown">
+                          <div class="track">
+                            <div class="handle"></div>
+                          </div>
+                        </label>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="button" ng-click="detailTwo=!detailTwo">
+                            <span ng-show="!detailTwo">More details</span>
+                            <span ng-show="detailTwo">Less details</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row" ng-show="detailTwo">
+                    <div class="col">
+                        <input type="text" ng-model="form.twoClub" placeholder="Blue club">
+                    </div>
+                    <div class="col">
+                        <input type="number" ng-model="form.twoWeigh" placeholder="Blue weigh">
+                    </div>
+                 </div>
+                <datalist id="judoka">
+                     <option data-ng-repeat="mine in judokaList" value="{{mine.name}}" />
+                </datalist>
+                <input type="submit" class="button button-block button-positive" value="add"/>
+            </form>
+        </div>
+    </ion-content>
+</ion-view>
