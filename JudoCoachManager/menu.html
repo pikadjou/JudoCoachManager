@@ -1,0 +1,26 @@
+﻿<ion-side-menus>
+    <ion-pane ion-side-menu-content>
+        <ion-nav-bar class="bar-stable nav-title-slide-ios7">
+            <ion-nav-back-button class="button-clear"><i class="icon ion-ios7-arrow-back"></i> Back</ion-nav-back-button>
+        </ion-nav-bar>
+        <ion-nav-view name="menuContent" animation="slide-left-right"></ion-nav-view>
+        <div class="tabs">
+            <a class="tab-item" href="#/app/home">
+                Home
+            </a>
+            <a class="tab-item">
+                Favorites
+            </a>
+            <a class="tab-item">
+                Settings
+            </a>
+        </div>
+    </ion-pane>
+
+    <ion-side-menu side="left">
+        <ion-nav-view name="leftContent"></ion-nav-view>
+    </ion-side-menu>
+    <ion-side-menu side="right">
+        <ion-nav-view name="rightContent"></ion-nav-view>
+    </ion-side-menu>
+</ion-side-menus>

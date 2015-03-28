@@ -20,12 +20,15 @@ var JudoCoachManager;
             this.$stateProvider.state('coachapp', {
                 url: "/coachapp",
                 abstract: true,
-                templateUrl: 'scripts/app/view/home.html'
+                templateUrl: 'menu.html'
             }).state('coachapp.index', {
                 url: "/index",
                 views: {
                     'menuContent': {
                         templateUrl: 'scripts/app/view/index.html'
+                    },
+                    'leftContent': {
+                        templateUrl: 'scripts/app/view/side/management.html'
                     }
                 }
             }).state('coachapp.home', {

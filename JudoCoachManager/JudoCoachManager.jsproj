@@ -113,6 +113,7 @@
     <Content Include="fonts\ionicons.svg" />
     <Content Include="fonts\ionicons.ttf" />
     <Content Include="fonts\ionicons.woff" />
+    <Content Include="menu.html" />
     <Content Include="scripts\app\view\about.html" />
     <Content Include="scripts\app\view\category.html" />
     <Content Include="scripts\app\view\competition.html" />

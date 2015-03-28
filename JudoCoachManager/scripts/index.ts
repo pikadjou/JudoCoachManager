@@ -4,6 +4,19 @@ module JudoCoachManager {
     "use strict";
 
     var coachapp = angular.module('coachapp', ['ngRoute', 'ionic', 'elif', 'angular-datepicker'])
+        //.run(function ($ionicPlatform) {
+        //    $ionicPlatform.ready(function () {
+        //        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+        //        // for form inputs)
+        //        if ((<any>window).cordova && (<any>window).cordova.plugins.Keyboard) {
+        //            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        //        }
+        //        if ((<any>window).StatusBar) {
+        //            // org.apache.cordova.statusbar required
+        //            (<any>window).StatusBar.styleDefault();
+        //        }
+        //    });
+        //})
         .controller('HomeCtrl', HomeCtrl)
         .config(
         ["$stateProvider", "$urlRouterProvider",
@@ -23,13 +36,16 @@ module JudoCoachManager {
                 .state('coachapp', {
                     url: "/coachapp",
                     abstract: true,
-                    templateUrl: 'scripts/app/view/home.html'
+                    templateUrl: 'menu.html'
                 })
                 .state('coachapp.index', {
                     url: "/index",
                     views: {
                         'menuContent': {
                             templateUrl: 'scripts/app/view/index.html'
+                        },
+                        'leftContent': {
+                            templateUrl: 'scripts/app/view/side/management.html'
                         }
                     }
                 })
