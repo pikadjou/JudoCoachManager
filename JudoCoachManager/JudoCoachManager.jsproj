@@ -173,6 +173,7 @@
     <Content Include="scripts\framework\jquery\jquery-2.1.3.js" />
     <Content Include="scripts\framework\jquery\jquery-2.1.3.min.js" />
     <Content Include="scripts\framework\jquery\jquery-2.1.3.min.map" />
+    <Content Include="scripts\framework\signal\signals.min.js" />
     <Content Include="scripts\i18n\angular-locale_aa-dj.js" />
     <Content Include="scripts\i18n\angular-locale_aa-er.js" />
     <Content Include="scripts\i18n\angular-locale_aa-et.js" />
@@ -932,13 +933,16 @@
     <Folder Include="res\screens\ios\" />
     <Folder Include="res\screens\windows\" />
     <Folder Include="res\screens\wp8\" />
+    <Folder Include="scripts\app\tools\" />
+    <Folder Include="scripts\app\services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="index.html" />
-    <TypeScriptCompile Include="scripts\app\controller\HomeCtrl.ts" />
+    <TypeScriptCompile Include="scripts\app\controllers\HomeCtrl.ts" />
+    <TypeScriptCompile Include="scripts\app\models\Competitions.ts" />
     <TypeScriptCompile Include="scripts\app\_all.ts" />
     <TypeScriptCompile Include="scripts\index.ts" />
     <TypeScriptCompile Include="scripts\platformOverrides.ts" />
@@ -1015,6 +1019,7 @@
     <TypeScriptCompile Include="scripts\typings\cordova\plugins\Vibration.d.ts" />
     <TypeScriptCompile Include="scripts\typings\cordova\plugins\WebSQL.d.ts" />
     <TypeScriptCompile Include="scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="scripts\typings\signal\signals.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <TypeScriptToolsVersion>1.0</TypeScriptToolsVersion>

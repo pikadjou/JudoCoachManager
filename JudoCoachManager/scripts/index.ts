@@ -4,20 +4,7 @@ module JudoCoachManager {
     "use strict";
 
     var coachapp = angular.module('coachapp', ['ngRoute', 'ionic', 'elif', 'angular-datepicker'])
-        //.run(function ($ionicPlatform) {
-        //    $ionicPlatform.ready(function () {
-        //        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-        //        // for form inputs)
-        //        if ((<any>window).cordova && (<any>window).cordova.plugins.Keyboard) {
-        //            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        //        }
-        //        if ((<any>window).StatusBar) {
-        //            // org.apache.cordova.statusbar required
-        //            (<any>window).StatusBar.styleDefault();
-        //        }
-        //    });
-        //})
-        .controller('HomeCtrl', HomeCtrl)
+		.controller('HomeCtrl', HomeCtrl)
         .config(
         ["$stateProvider", "$urlRouterProvider",
             ($stateProvider, $urlRouterProvider) => {

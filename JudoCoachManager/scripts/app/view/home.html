@@ -3,18 +3,18 @@
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>-->
     <ion-content class="has-header">
-        <!--<button class="button button-block button-positive" ng-click="new=!new">New competition</button>
-        <div class="list" ng-show="new">
-            <label class="item item-input">
-                <input type="text" ng-model="form.name" placeholder="New competition" />
-            </label>
-            <label class="item item-input">
-                <input type="text" pick-a-date="form.created" placeholder="Select Date" />
-            </label>
-            <button class="button button-block button-positive" ng-click="encode(form)">Created</button>
-        </div>
+		<button class="button button-block button-positive" ng-click="vm.newElem=!vm.newElem">New competition</button>
+		<div class="list" ng-show="vm.newElem">
+			<label class="item item-input">
+				<input type="text" ng-model="vm.form.name" placeholder="New competition" />
+			</label>
+			<label class="item item-input">
+				<input type="text" pick-a-date="vm.form.created" placeholder="Select Date" />
+			</label>
+			<button class="button button-block button-positive" ng-click="vm.encode()">Created</button>
+		</div>
         <ion-list class="lisOfElelemt">
-            <ion-item ng-repeat="item in list">
+            <ion-item ng-repeat="item in vm.list">
                 <div ng-init="item.detail = false; item.edit = false">
                     <div class="row">
                         <div class="col-90 col">
@@ -42,19 +42,18 @@
                             <button class="button button-positive" ng-show="!item.edit" ng-click="item.edit=!item.edit">
                                 edit
                             </button>
-                            <button class="button button-positive" ng-show="item.edit" ng-click="item.edit=!item.edit; update(item)">
+                            <button class="button button-positive" ng-show="item.edit" ng-click="item.edit=!item.edit; vm.update(item)">
                                 save
                             </button>
                         </div>
                         <div class="col-50 col">
-                            <button class="button button-positive" ng-click="remove(item)">
+                            <button class="button button-positive" ng-click="vm.remove(item)">
                                 delete
                             </button>
                         </div>
                     </div>
                 </div>
             </ion-item>
-        </ion-list>-->
-        Home
+        </ion-list>
     </ion-content>
 </ion-view>
